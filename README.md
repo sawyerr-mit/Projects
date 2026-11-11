@@ -1,8 +1,8 @@
 # Projects
-Here are all my projects!
+Hello, I'm Sawyer Rooney, and I am a student at MIT. Here is my personal github where I keep track of all my current and past projects.
 
 ## Setup
-Requires Python 3.10+ (the Dijkstra project uses `X | None` type hints).
+Requires Python 3.10+
 
 ```
 pip install -r requirements.txt
@@ -20,9 +20,8 @@ Each script can be run from any directory, e.g. `python "Connect-4 AI/Connect4.p
 | SVD Image Compression | `python image_compression.py` (reads `cat.jpg`, writes the output images next to the script) |
 
 ## API keys (RFC for Hazardous Asteroids notebook)
-The notebook reads keys from environment variables (or you can paste them over the placeholders in the notebook):
+The notebook reads keys from an environment variable (paste your personal keys over the placeholders in the notebook):
 
-- `RAPIDAPI_KEY`: from https://rapidapi.com (subscribe to the exchangerate-api and yahoo-finance15 APIs)
 - `NASA_API_KEY`: free from https://api.nasa.gov
 
-Set them before launching Jupyter, e.g. `export RAPIDAPI_KEY=...` and `export NASA_API_KEY=...`.
+Set before launching Jupyter, `export NASA_API_KEY=...`.
