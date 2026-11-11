@@ -290,6 +290,9 @@ def aStar(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], int, 
 
 
 if __name__ == "__main__":
+    import os
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))  # so the .pickle files are found from any directory
+
     testcases = [('romania.pickle',0, 1, False) ,
                  ('romania.pickle', 13, 4, False),
                  ('kennebec.pickle',31358, 101336, False),

@@ -132,6 +132,9 @@ def evaluate_labeled_folder(folder_path, params, invert_if_needed=False):
     labels = []
     for f in fnames:
         try:
+            # only treat the first character as a label if it is a lone digit (not the start of a number like a year)
+            if len(f) > 1 and f[1].isdigit():
+                raise ValueError
             labels.append(int(f[0]))
         except:
             labels.append(None)

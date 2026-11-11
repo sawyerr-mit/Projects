@@ -1,6 +1,7 @@
 import pygame
 import math
 import sys
+import os
 
 ROWS, COLS = 6, 7
 CELL = 145
@@ -250,6 +251,8 @@ def show_message(screen, font, text):
 
 
 def main():
+    # Run relative to this file so the sound files are found from any working directory
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     HUMAN = P1
 
     pygame.init()

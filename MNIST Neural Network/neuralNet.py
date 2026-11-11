@@ -5,7 +5,6 @@ from platform import system
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import numpy as np
 import pickle
-from tensorflow.keras.datasets import mnist
 
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -203,6 +202,8 @@ def forward_predict(X, params):
 
 # main function where the network is first trained, and where the parameters are then stored
 def main():
+    # imported here (not at top) so testing.py can use forward_predict without installing tensorflow
+    from tensorflow.keras.datasets import mnist
     # X contains images, Y contains solutions. Train is used to train the network, test is used to test after
     (X_train, Y_train_raw), (X_test, Y_test_raw) = mnist.load_data()
     # normalize image data

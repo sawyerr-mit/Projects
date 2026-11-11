@@ -1,0 +1,11 @@
+# Install with:  pip install -r requirements.txt
+numpy
+pygame            # Connect-4 AI
+opencv-python     # SVD Image Compression
+pillow            # MNIST Neural Network (testing.py)
+matplotlib        # MNIST Neural Network (testing.py), RFC notebook
+tensorflow        # MNIST Neural Network: ONLY needed to run neuralNet.py (training); inference via testing.py does not need it
+pandas            # RFC for Hazardous Asteroids notebook
+requests          # RFC for Hazardous Asteroids notebook
+scikit-learn      # RFC for Hazardous Asteroids notebook
+jupyter           # RFC for Hazardous Asteroids notebook

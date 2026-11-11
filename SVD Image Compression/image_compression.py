@@ -1,5 +1,9 @@
 import numpy as np
 import cv2
+import os
+
+# Run relative to this file so cat.jpg is found (and outputs are saved) next to the script
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Image Pre-Processing
 
