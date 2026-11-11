@@ -1,4 +1,4 @@
-"""Visualize graphs stored in the pickle files used by search.py."""
+
 
 import argparse
 import os
