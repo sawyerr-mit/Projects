@@ -10,20 +10,22 @@ WIDTH = COLS * CELL
 HEIGHT = (ROWS + 1) * CELL
 
 # Initialize the colors that pygame will use.
-BLUE        = (30,  100, 200)
-BLACK       = (10,   10,  10)
-RED         = (220,  50,  50)
-DARK_RED    = (184, 29, 29)
-YELLOW      = (240, 200,  30)
+BLUE = (30, 100, 200)
+BLACK = (10, 10, 10)
+RED = (220, 50, 50)
+DARK_RED = (184, 29, 29)
+YELLOW = (240, 200, 30)
 DARK_YELLOW = (209, 163, 23)
-WHITE       = (240, 240, 240)
-GRAY        = (60,   60,  60)
+WHITE = (240, 240, 240)
+GRAY = (60, 60, 60)
 
 EMPTY, P1, P2 = 0, 1, 2
+
 
 # Create the empty board
 def make_board():
     return [[EMPTY] * COLS for _ in range(ROWS)]
+
 
 # Function for when a player makes a move at a column
 def drop(board, col, player):
@@ -33,33 +35,38 @@ def drop(board, col, player):
             return row
     return -1
 
+
 # undo move, not accessible to the player, it is used as a helper
 # function during the implementation of the minimax algorithm
 def undo(board, row, col):
     board[row][col] = EMPTY
 
+
 # Checks if given move is valid on board
 def valid(board, col):
     return board[0][col] == EMPTY
+
 
 # Generates a list of valid moves for the AI to check
 def valid_moves(board):
     cols = list(range(COLS))
     return [c for c in cols if valid(board, c)]
 
+
 # Checks if someone has won
 def winner(board, row, col, player):
-    for dr, dc in [(0,1),(1,0),(1,1),(1,-1)]:
+    for dr, dc in [(0, 1), (1, 0), (1, 1), (1, -1)]:
         count = 1
         for sign in (1, -1):
-            r, c = row + dr*sign, col + dc*sign
+            r, c = row + dr * sign, col + dc * sign
             while 0 <= r < ROWS and 0 <= c < COLS and board[r][c] == player:
                 count += 1
-                r += dr*sign
-                c += dc*sign
+                r += dr * sign
+                c += dc * sign
         if count >= 4:
             return True
     return False
+
 
 # Evaluation window, which acts as a kernal which the evaluation function moves
 # across the board to get a good evaluation. More pieces in a row corresponds
@@ -82,7 +89,8 @@ def evaluate_window(a, b, c, d, player):
 
     return score
 
-# Evaluation function. This function checks from the center column and slides the 4-cell evaluation 
+
+# Evaluation function. This function checks from the center column and slides the 4-cell evaluation
 # window across every possible winning direction.
 def evaluate(board, player):
     score = 0
@@ -98,8 +106,8 @@ def evaluate(board, player):
     for r in range(ROWS):
         for c in range(COLS - 3):
             score += evaluate_window(
-                board[r][c], board[r][c+1],
-                board[r][c+2], board[r][c+3],
+                board[r][c], board[r][c + 1],
+                board[r][c + 2], board[r][c + 3],
                 player
             )
 
@@ -107,8 +115,8 @@ def evaluate(board, player):
     for c in range(COLS):
         for r in range(ROWS - 3):
             score += evaluate_window(
-                board[r][c], board[r+1][c],
-                board[r+2][c], board[r+3][c],
+                board[r][c], board[r + 1][c],
+                board[r + 2][c], board[r + 3][c],
                 player
             )
 
@@ -116,8 +124,8 @@ def evaluate(board, player):
     for r in range(ROWS - 3):
         for c in range(COLS - 3):
             score += evaluate_window(
-                board[r][c], board[r+1][c+1],
-                board[r+2][c+2], board[r+3][c+3],
+                board[r][c], board[r + 1][c + 1],
+                board[r + 2][c + 2], board[r + 3][c + 3],
                 player
             )
 
@@ -125,12 +133,13 @@ def evaluate(board, player):
     for r in range(ROWS - 3):
         for c in range(3, COLS):
             score += evaluate_window(
-                board[r][c], board[r+1][c-1],
-                board[r+2][c-2], board[r+3][c-3],
+                board[r][c], board[r + 1][c - 1],
+                board[r + 2][c - 2], board[r + 3][c - 3],
                 player
             )
 
     return score
+
 
 # This method prioritizes moves in this order: immediate winning moves, moves that block an
 # immediate opponent win, the center column, and then all remaining columns. Connect 4 theory
@@ -169,7 +178,8 @@ def order_moves(board, cols, player):
     # Return the list of moves arranged in this prioritized order
     return winning + blocking + center + others
 
-# The minimax algorithm; this is the heart of this code. 
+
+# The minimax algorithm; this is the heart of this code.
 def minimax(board, depth, alpha, beta, maximizing, player):
     opponent = P1 if player == P2 else P2
 
@@ -274,7 +284,7 @@ def draw(screen, board, font, hover_col, current_player):
             pygame.draw.circle(screen, ring_color, (cx, cy), CELL // 2 - 8)
             # Draw the lighter inner circle on top of the ring for placed pieces
             if ring_color is not BLACK:
-                pygame.draw.circle(screen, RED if ring_color is DARK_RED else YELLOW,(cx, cy), 0.8*CELL // 2 - 8)
+                pygame.draw.circle(screen, RED if ring_color is DARK_RED else YELLOW, (cx, cy), 0.8 * CELL // 2 - 8)
 
     pygame.display.flip()
 
@@ -304,7 +314,7 @@ def main():
     you_lose = pygame.mixer.Sound("lose.wav")
     start = pygame.mixer.Sound("new_game.mp3")
     victory = pygame.mixer.Sound("victory.mp3")
-    
+
     # Create the game window and important values for pygame such as clock and font
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Connect Four")
@@ -324,7 +334,7 @@ def main():
     # AI chooses move, plays it, and check if the game has ended
     def do_ai_move(board, current):
         draw(screen, board, font, hover_col, current)
-        _, col = minimax(board, 10, -math.inf, math.inf, True, AI)
+        _, col = minimax(board, 14, -math.inf, math.inf, True, AI)
         row = drop(board, col, AI)
         piece_played.play()
 
