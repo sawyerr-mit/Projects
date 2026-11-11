@@ -1,51 +1,31 @@
 """
-Rocko Graziano, University of Maine at Augusta, Spring 2026
+search.py
 
-CIS 454, search.py
+BFS, Dijkstra and A* graph searches.
 
-In this assignment you will implement BFS, Dijkstra & A* graph searches.
-
-Two graphs will be used
-    romania  -- based on romania map in AI-AMA  (Russell/Norvig)
-    kennebec -- based on data from OpenStreetMap.org
-
-The lat/lon values for romania are fictions - values which will calculate approximately correct
-values based on the distance table from the lecture
-
-I type annotated the parameters and expected return values for each method and function. Note
-that Python dos NOT enforce compliance with these, they serve as documentation
-
+Adapted from CIS 454 (AI and Advanced Python) Assignment 6, University of Maine at Augusta,
+Spring 2026. Original starter code by Rocko Graziano.
 """
 
-# Standard libraries
 import math
 import pickle
 from collections import deque
 
-# Class-specific packages
-from IndexMinPQ import *    # a Minimum Priority Queue which supports dynamic updating
+from IndexMinPQ import *
 from graph import Graph
 
 
 def BFS(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], int, int]:
     """
-    given a graph G and a source vertex s, find the shortest path from s to t
+    Find the path with the fewest edges from s to t in an unweighted search.
+    The target is considered found when it is first encountered, not when it is popped.
 
-    the debug flag can be used to print optional output while testing your program
-
-    You will need data structures to track both explored and prior -- I suggest you use
-    a dictionary where the key is the node (vertex) id, and the value is either
-    True/False (for explored) or the previous node id (for prior)
-
-    Note that we consider t found when it is first encountered,
-         not when it is removed from the search frontier.  Think about why...
-
-    return:  path        - a list of the nodes from s to t;  should include both s & t
-             path length - the number of edges (steps) in the path
+    return:  path        - a list of the nodes from s to t, including both
+             path length - the number of edges in the path
              popcount    - the number of pops from the search frontier
     """
 
-    popcount = 0  # increment this every time you pop a node from the search frontier
+    popcount = 0
 
     print(f'\nUsing BFS to find path from {s} to {t}')
 
@@ -101,21 +81,14 @@ def BFS(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], int, in
 
 def Dijkstra(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], int, int]:
     """
-    given a weighted graph G find the shortest path (by edge weights) from s to t
+    Find the shortest path (by edge weights) from s to t in a weighted graph.
 
-    the debug flag can be used to print optional output while testing your program
-
-    You will need data structures to track both prior and pathcost-- I suggest you
-    use a dictionary where the key is the node (vertex) id, and the value is either
-    the previous node id (for prior) or the current lowest cost to reach the node
-    (for pathcost).   Your frontier can take advantage of the provided IndexMinPQ class
-
-    return:  path     - a list of the nodes from s to t;  should include both s & t
-             distance  - the distance(sum of the weights)  from s to t
+    return:  path     - a list of the nodes from s to t, including both
+             distance - the sum of the edge weights from s to t
              popcount - the number of pops from the search frontier
     """
 
-    popcount = 0  # increment this every time you pop a node from the search frontier
+    popcount = 0
 
     print(f'\nUsing Dijkstra to find path from {s} to {t}')
 
@@ -179,31 +152,19 @@ def Dijkstra(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], in
     # Return flag data in case of error
     return [], -1, popcount
 
+
 def aStar(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], int, int]:
     """
-    given a weighted graph G find the shortest path (by edge weights) from s to t
-    This time we use an Informed Search
+    Find the shortest path (by edge weights) from s to t in a weighted graph,
+    guided by a euclidean-distance heuristic on each vertex's lat/lon.
 
-    the debug flag can be used to print optional output while testing your program
-
-    You will need data structures to track both prior and pathcost-- I suggest you
-    use a dictionary where the key is the node (vertex) id, and the value is either
-    the previous node id (for prior) or the current lowest cost to reach the node
-    (for pathcost). Your frontier can take advantage of the provided IndexMinPQ class
-
-    return:  path     - a list of the nodes from s to t;  should include both s & t
-             distance  - the distance from s to t
+    return:  path     - a list of the nodes from s to t, including both
+             distance - the distance from s to t
              popcount - the number of pops from the search frontier
     """
 
     def H(u: int, v: int) -> float:
-        """ given two vertices u & v, calculate the optimistic length between them.
-
-            Each vertex has an attribute, tags, a dictionary of various values associated with
-            the vertex.  The Graph.getTags(vertex) method provides access to them.
-
-            Use the 'lat' and 'lon' values associated with each vertex
-            to calculate the euclidian distance between the two vertices.   """
+        """ Euclidean distance between the lat/lon of vertices u and v. """
 
         # Access tags
         tags_u = G.getTags(u)
@@ -216,7 +177,7 @@ def aStar(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], int, 
         # Pythagorean theorem! I knew Freshman year geometry would one day come in handy.
         return math.sqrt((lat_u - lat_v) ** 2 + (lon_u - lon_v) ** 2)
 
-    popcount = 0  # increment this every time you pop a node from the search frontier
+    popcount = 0
 
     print(f'\nUsing A* to find path from {s} to {t}')
 
@@ -291,11 +252,11 @@ def aStar(G: Graph, s: int, t: int, debug: bool=False) -> tuple[list[int], int, 
 
 if __name__ == "__main__":
     import os
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))  # so the .pickle files are found from any directory
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-    testcases = [('romania.pickle',0, 1, False) ,
+    testcases = [('romania.pickle', 0, 1, False),
                  ('romania.pickle', 13, 4, False),
-                 ('kennebec.pickle',31358, 101336, False),
+                 ('kennebec.pickle', 31358, 101336, False),
                  ]
 
     for testcase in testcases:
@@ -313,4 +274,3 @@ if __name__ == "__main__":
 
         path, pathlength, popcount = aStar(G, testcase[1], testcase[2], debug=testcase[3])
         print(f'A* Path is {pathlength} long in {len(path)-1} edges; found in {popcount:,d} pops\n{path} ')
-
