@@ -11,11 +11,10 @@ class IndexMinPQ:
 
     def __init__(self, n: int):
         self.n = n
-        self._heap = []                 # heap position -> item index
-        self._pos = [-1] * n            # item index   -> heap position (-1 = absent)
-        self._key = [None] * n          # item index   -> key
+        self._heap = []                 # heap position : item index
+        self._pos = [-1] * n            # item index : heap position (-1 = absent)
+        self._key = [None] * n          # item index : key
 
-    # ---- public API -----------------------------------------------------
     def isEmpty(self) -> bool:
         return not self._heap
 
