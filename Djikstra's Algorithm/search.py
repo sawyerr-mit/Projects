@@ -4,7 +4,7 @@ search.py
 BFS, Dijkstra and A* graph searches.
 
 Adapted from CIS 454 (AI and Advanced Python) Assignment 6, University of Maine at Augusta,
-Spring 2026. Original starter code by Rocko Graziano.
+Spring 2026. Original assignment given by Rocko Graziano.
 """
 
 import math
